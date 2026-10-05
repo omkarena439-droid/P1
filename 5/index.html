@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>THE GRANTHI CASE — Confidential Investigation File</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-mystery">
+  <!-- Interactive Particles Canvas -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Celebration Confetti Canvas -->
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <!-- Persistent Top Header / Investigation Progress HUD -->
+  <header class="investigation-hud" id="hud" aria-label="Investigation status bar">
+    <div class="hud-left">
+      <span class="hud-badge pulse-dot"></span>
+      <span class="hud-case-tag" id="hudCaseTag">CASE #0017</span>
+      <span class="hud-divider">/</span>
+      <span class="hud-subject">SUBJECT: GRANTHI</span>
+    </div>
+
+    <div class="hud-center">
+      <div class="hud-progress-wrap">
+        <span class="hud-step-counter" id="hudStepCounter">STEP 01 / 12</span>
+        <div class="hud-progress-bar">
+          <div class="hud-progress-fill" id="hudProgressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud-right">
+      <!-- Music Control Pill -->
+      <button class="music-toggle-btn" id="musicToggleBtn" title="Music playback control" aria-label="Toggle music">
+        <span class="music-icon" id="musicIcon">🎵</span>
+        <span class="music-status" id="musicStatus">MUSIC OFF</span>
+        <div class="sound-wave-bars" id="soundWaves" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </button>
+
+      <!-- SFX Mute/Unmute Pill -->
+      <button class="sfx-toggle-btn" id="sfxToggleBtn" title="Toggle sound effects" aria-label="Toggle sound effects">
+        <span id="sfxIcon">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Audio Element -->
+  <audio id="bgMusic" src="assets/music.mp3" preload="auto" loop></audio>
+
+  <!-- MAIN EXPERIENCE CONTAINER -->
+  <main class="experience-viewport" id="viewport">
+
+    <!-- ==============================================
+         SCREEN 1: OPENING SCREEN — CASE FILE
+    =============================================== -->
+    <section class="screen-section active" id="screen-case-file" data-step="1">
+      <div class="screen-content case-file-layout">
+        <div class="classified-stamp-wrapper">
+          <div class="classified-stamp animate-stamp">CLASSIFIED</div>
+        </div>
+
+        <div class="case-dossier-card">
+          <div class="card-inner-tape"></div>
+          <div class="dossier-header">
+            <div class="dossier-code">BUREAU OF FRIENDSHIP INTELLIGENCE • DEPT 0017</div>
+            <div class="dossier-id">TOP SECRET DOSSIER</div>
+          </div>
+
+          <div class="dossier-body">
+            <div class="file-number-tag">CASE FILE #0017</div>
+            <h1 class="main-subject-title">
+              <span class="label-small">PRIMARY SUBJECT</span>
+              <span class="subject-name-glow">GRANTHI</span>
+            </h1>
+
+            <div class="dossier-meta-grid">
+              <div class="meta-item">
+                <span class="meta-label">CASE STATUS:</span>
+                <span class="meta-value status-urgent">VERY IMPORTANT ⚠️</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">CLEARANCE LEVEL:</span>
+                <span class="meta-value">EYES ONLY</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">INVESTIGATOR:</span>
+                <span class="meta-value">Her Best Friend 🕵️‍♂️</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">PRIMARY CHARGE:</span>
+                <span class="meta-value">Suspicious Pagalpan</span>
+              </div>
+            </div>
+
+            <div class="dossier-prompt-banner">
+              <p class="hindi-hook-text">
+                GRANTHI, tumhare liye ek secret case hai. <span class="eye-emoji">👀</span>
+              </p>
+              <p class="english-hook-sub">
+                An investigation has been opened into your actions. You are required to inspect the evidence immediately.
+              </p>
+            </div>
+          </div>
+
+          <div class="dossier-actions">
+            <button class="primary-action-btn pulse-glow" id="startInvestigationBtn">
+              <span class="btn-text">START INVESTIGATION 🔍</span>
+              <span class="btn-shine"></span>
+            </button>
+            <div class="interaction-note">Tap to open confidential file & initialize audio</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 2: INVESTIGATION INTRO
+    =============================================== -->
+    <section class="screen-section" id="screen-intro" data-step="2">
+      <div class="screen-content intro-layout">
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <div class="terminal-title">SYS_SEC_SCANNER // INITIALIZING TRACE</div>
+          </div>
+
+          <div class="terminal-content">
+            <div class="system-status-headline">
+              <span class="scan-radar-icon">📡</span>
+              <h2 class="status-title typing-header" id="introSystemTitle">INVESTIGATION INITIATED...</h2>
+            </div>
+
+            <div class="animated-teleprompter" id="teleprompter">
+              <p class="tele-line" data-delay="600">Something is not right.</p>
+              <p class="tele-line" data-delay="1600">Someone has been acting suspiciously.</p>
+              <p class="tele-line" data-delay="2700">Someone who is...</p>
+              <p class="tele-line highlight-annoying" data-delay="3800">...too annoying.</p>
+              <p class="tele-line highlight-caring" data-delay="4900">...too caring.</p>
+              <p class="tele-line highlight-bestie" data-delay="6100">...and somehow still manages to be the best friend.</p>
+            </div>
+
+            <!-- Subject Identity Detection Box -->
+            <div class="detection-box" id="detectionBox">
+              <div class="scanner-laser-line"></div>
+              <div class="detection-badge">IDENTITY DETECTED</div>
+              <div class="detected-subject-name" id="detectedName">GRANTHI</div>
+              <div class="detected-sub-label">MATCH CONFIDENCE: 100% (No Doubt Left 😂)</div>
+            </div>
+          </div>
+
+          <div class="terminal-footer">
+            <button class="primary-action-btn disabled-initially" id="viewEvidenceBtn" disabled>
+              <span class="btn-text">VIEW EVIDENCE 🔎</span>
+              <span class="btn-shine"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 3: EVIDENCE #01
+    =============================================== -->
+    <section class="screen-section" id="screen-evidence-1" data-step="3">
+      <div class="screen-content evidence-card-layout">
+        <div class="evidence-digital-card">
+          <div class="evidence-badge-tag">EXHIBIT A // DOSSIER #0017</div>
+          <h2 class="evidence-main-heading">EVIDENCE #01</h2>
+
+          <div class="evidence-dialogue-box">
+            <div class="quote-mark">“</div>
+            <p class="evidence-statement">
+              Ek aisi ladki mili jo bina reason ke gussa ho sakti hai. <span class="emoji">😂</span>
+            </p>
+          </div>
+
+          <!-- Animated Threat Level Meter -->
+          <div class="threat-meter-container">
+            <div class="threat-meter-header">
+              <span class="threat-title">THREAT LEVEL:</span>
+              <span class="threat-value-max" id="threatValue">MAXIMUM</span>
+            </div>
+            <div class="threat-meter-track">
+              <div class="threat-meter-bar" id="threatBar"></div>
+            </div>
+            <div class="threat-meter-labels">
+              <span>Calm</span>
+              <span>Mildly Irritated</span>
+              <span>Pagalpan</span>
+              <span class="active-danger">Maximum Gussa 🔥</span>
+            </div>
+          </div>
+
+          <div class="investigator-analysis-box">
+            <span class="analysis-tag">FIELD ANALYSIS:</span>
+            <p>One minute laughing at memes, next minute silent treatment for 3 hours because of a theoretical argument. 😂</p>
+          </div>
+
+          <button class="primary-action-btn" id="evidence1NextBtn">
+            <span class="btn-text">NEXT EVIDENCE →</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 4: EVIDENCE #02
+    =============================================== -->
+    <section class="screen-section" id="screen-evidence-2" data-step="4">
+      <div class="screen-content evidence-card-layout">
+        <div class="evidence-digital-card">
+          <div class="evidence-badge-tag">EXHIBIT B // DOSSIER #0017</div>
+          <h2 class="evidence-main-heading">EVIDENCE #02</h2>
+
+          <div class="evidence-dialogue-box">
+            <div class="quote-mark">“</div>
+            <p class="evidence-statement">
+              Jo apne best friend ko unnecessarily pareshan karti hai.
+            </p>
+          </div>
+
+          <!-- Animated Stamp Container -->
+          <div class="stamp-stage">
+            <div class="confirmed-stamp" id="confirmedStamp">CONFIRMED ✓</div>
+            <div class="stamp-shadow"></div>
+          </div>
+
+          <div class="behavior-status-card">
+            <div class="behavior-row">
+              <span class="behavior-label">Behavior:</span>
+              <span class="behavior-highlight">Highly suspicious.</span>
+            </div>
+            <p class="behavior-details">
+              Spams 25 reels when you're busy, ignores your calls when you are free, and complains "tu mujhe bhool gaya" when you reply 4 minutes late. 😂
+            </p>
+          </div>
+
+          <button class="primary-action-btn" id="evidence2NextBtn">
+            <span class="btn-text">NEXT →</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 5: EVIDENCE #03
+    =============================================== -->
+    <section class="screen-section" id="screen-evidence-3" data-step="5">
+      <div class="screen-content evidence-card-layout">
+        <div class="evidence-digital-card">
+          <div class="evidence-badge-tag">EXHIBIT C // DOSSIER #0017</div>
+          <h2 class="evidence-main-heading">EVIDENCE #03</h2>
+
+          <div class="pagal-punchline-container">
+            <div class="punchline-part part-1" id="pagalPart1">
+              "Jo khud pagal hai..."
+            </div>
+            <div class="punchline-ellipsis" id="pagalDots">...</div>
+            <div class="punchline-part part-2" id="pagalPart2">
+              "...aur saamne wale ko bhi bana deti hai. <span class="clown-emoji">🤡</span>"
+            </div>
+          </div>
+
+          <div class="serious-case-alert" id="seriousAlert">
+            <div class="alert-icon-ring">🚨</div>
+            <div class="alert-text-block">
+              <div class="alert-title">CASE GETTING SERIOUS.</div>
+              <div class="alert-verdict">Suspect is definitely GRANTHI.</div>
+            </div>
+          </div>
+
+          <button class="primary-action-btn" id="evidence3NextBtn">
+            <span class="btn-text">CONTINUE INVESTIGATION 🔍</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 6: MEMORY VERIFICATION (QUIZ)
+    =============================================== -->
+    <section class="screen-section" id="screen-memory-quiz" data-step="6">
+      <div class="screen-content quiz-layout">
+        <div class="quiz-card">
+          <div class="quiz-header">
+            <div class="quiz-badge">COGNITIVE INTERROGATION</div>
+            <h2 class="quiz-main-title">MEMORY VERIFICATION</h2>
+            <p class="quiz-sub-title">Let's see if the suspect actually remembers everything.</p>
+          </div>
+
+          <!-- Question 1 -->
+          <div class="quiz-question-block active" id="quizQuestion1">
+            <div class="q-number-pill">QUESTION 01 OF 03</div>
+            <h3 class="q-text">Who is more pagal?</h3>
+            <div class="quiz-options-grid">
+              <button class="quiz-opt-btn" data-q="1" data-opt="granthi">
+                <span class="opt-label">GRANTHI 😂</span>
+              </button>
+              <button class="quiz-opt-btn" data-q="1" data-opt="friend">
+                <span class="opt-label">Her Best Friend 🤡</span>
+              </button>
+              <button class="quiz-opt-btn" data-q="1" data-opt="both">
+                <span class="opt-label">Both 😭</span>
+              </button>
+            </div>
+            <div class="quiz-feedback-box" id="feedbackQ1"></div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="quiz-question-block" id="quizQuestion2">
+            <div class="q-number-pill">QUESTION 02 OF 03</div>
+            <h3 class="q-text">Who gets angry faster?</h3>
+            <div class="quiz-options-grid">
+              <button class="quiz-opt-btn" data-q="2" data-opt="granthi_angry">
+                <span class="opt-label">GRANTHI 😤</span>
+              </button>
+              <button class="quiz-opt-btn" data-q="2" data-opt="friend_calm">
+                <span class="opt-label">Best Friend 😇</span>
+              </button>
+              <button class="quiz-opt-btn" data-q="2" data-opt="depends">
+                <span class="opt-label">Depends 😂</span>
+              </button>
+            </div>
+            <div class="quiz-feedback-box" id="feedbackQ2"></div>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="quiz-question-block" id="quizQuestion3">
+            <div class="q-number-pill">QUESTION 03 OF 03</div>
+            <h3 class="q-text">Who should make the first move after a fight?</h3>
+            <div class="quiz-options-grid">
+              <button class="quiz-opt-btn" data-q="3" data-opt="me">
+                <span class="opt-label">Me ❤️</span>
+              </button>
+              <button class="quiz-opt-btn" data-q="3" data-opt="granthi_first">
+                <span class="opt-label">GRANTHI 😂</span>
+              </button>
+              <button class="quiz-opt-btn" data-q="3" data-opt="both_talk">
+                <span class="opt-label">Both should talk 🫶🏻</span>
+              </button>
+            </div>
+            <div class="quiz-feedback-box" id="feedbackQ3"></div>
+          </div>
+
+          <!-- Quiz Completion Banner -->
+          <div class="quiz-complete-stage" id="quizCompleteStage">
+            <div class="complete-badge-ring">✓</div>
+            <h3 class="quiz-complete-title">MEMORY TEST COMPLETE.</h3>
+            <p class="quiz-complete-subtitle">SUBJECT KNOWS TOO MUCH.</p>
+            <button class="primary-action-btn pulse-glow" id="quizProceedBtn">
+              <span class="btn-text">ACCESS CLASSIFIED LOCK 🔐</span>
+              <span class="btn-shine"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 7: SECRET PASSWORD
+    =============================================== -->
+    <section class="screen-section" id="screen-secret-lock" data-step="7">
+      <div class="screen-content lock-layout">
+        <div class="vault-lock-card">
+          <div class="vault-top-badge">TOP SECRET // LEVEL 5 ENCRYPTION</div>
+          <h2 class="vault-title">TOP SECRET</h2>
+
+          <!-- Digital Padlock Visual -->
+          <div class="vault-lock-visual" id="vaultVisual">
+            <div class="padlock-icon" id="padlockIcon">
+              <div class="shackle" id="padlockShackle"></div>
+              <div class="lock-body">
+                <div class="keyhole"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vault-description">
+            <p class="vault-p1">One final secret is locked.</p>
+            <p class="vault-p2">Only GRANTHI can unlock it.</p>
+          </div>
+
+          <form class="password-form" id="passwordForm" onsubmit="return false;">
+            <div class="input-wrapper">
+              <span class="input-icon">🔑</span>
+              <input
+                type="text"
+                class="password-input"
+                id="secretPasswordInput"
+                placeholder="ENTER PASSWORD"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+
+            <div class="password-hint-text">
+              The answer is something only the person reading this would know.
+            </div>
+
+            <div class="password-actions">
+              <button type="submit" class="primary-action-btn" id="unlockVaultBtn">
+                <span class="btn-text">UNLOCK 🔐</span>
+                <span class="btn-shine"></span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Clue Drawer -->
+          <div class="clue-section">
+            <button type="button" class="clue-toggle-btn" id="clueToggleBtn">
+              Need a clue? 👀
+            </button>
+            <div class="clue-drawer" id="clueDrawer">
+              <div class="clue-box">
+                <span class="clue-light">💡</span>
+                <p>Think about the person who made this entire stupid website for you. 😂</p>
+                <div class="clue-subnote">(Hint: BESTFRIEND)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="password-status-msg" id="passwordStatusMsg" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 8: THE MOOD SHIFT
+    =============================================== -->
+    <section class="screen-section" id="screen-mood-shift" data-step="8">
+      <div class="screen-content mood-shift-layout">
+        <div class="ambient-glow-aura"></div>
+        <div class="mood-shift-card">
+          <div class="floating-hearts-burst" aria-hidden="true">
+            <span>✨</span><span>🌸</span><span>✨</span>
+          </div>
+
+          <div class="mood-text-sequence" id="moodSequence">
+            <p class="mood-line mood-1" id="mLine1">Okay...</p>
+            <p class="mood-line mood-2" id="mLine2">Enough investigation.</p>
+            <div class="mood-divider-sparkle">✦ ✦ ✦</div>
+            <p class="mood-line mood-3" id="mLine3">Ab serious baat.</p>
+          </div>
+
+          <button class="primary-action-btn soft-glow-btn" id="proceedToLetterBtn">
+            <span class="btn-text">OPEN CONFIDENTIAL LETTER 💌</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 9: CONFIDENTIAL LETTER
+    =============================================== -->
+    <section class="screen-section" id="screen-confidential-letter" data-step="9">
+      <div class="screen-content letter-layout">
+        <div class="luxury-letter-envelope">
+          <div class="envelope-stamp-label">CONFIDENTIAL — FOR GRANTHI ONLY</div>
+
+          <article class="parchment-letter">
+            <div class="letter-wax-seal" aria-hidden="true">❤️</div>
+            <header class="letter-header">
+              <h2 class="letter-salutation">Dear Granthi ❤️</h2>
+            </header>
+
+            <div class="letter-body">
+              <p class="letter-paragraph">
+                Investigation ke naam pe tujhe itna pareshan kar diya...
+              </p>
+              <p class="letter-paragraph">
+                But there is one thing I actually wanted to say.
+              </p>
+              <p class="letter-paragraph letter-highlight">
+                Tu meri life ke un logon mein se hai jinke saath memories automatically special ban jaati hain.
+              </p>
+              <p class="letter-paragraph">
+                Hum kitna bhi pagalpan karein,<br />
+                kitni bhi bakchodi karein,<br />
+                aur kitni bhi baar ek dusre se irritate ho...
+              </p>
+              <p class="letter-paragraph letter-strong">
+                At the end of the day,<br />
+                tu meri best friend hai.
+              </p>
+              <div class="letter-callout-box">
+                <p>And honestly...</p>
+                <p class="callout-pause">I don't say it enough.</p>
+                <p class="callout-heart">But you matter to me. ❤️</p>
+              </div>
+            </div>
+
+            <footer class="letter-footer">
+              <div class="signature-line">Always in your corner,</div>
+              <div class="signature-name">Your Best Friend 🤝</div>
+            </footer>
+          </article>
+
+          <button class="primary-action-btn warm-btn" id="letterNextBtn">
+            <span class="btn-text">A PROMISE FOR YOU 🤞🏻</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 10: FRIENDSHIP PROMISE
+    =============================================== -->
+    <section class="screen-section" id="screen-friendship-promise" data-step="10">
+      <div class="screen-content promises-layout">
+        <div class="promises-header">
+          <span class="promise-tag">UNBREAKABLE COVENANT</span>
+          <h2 class="promises-main-title">THE 3 GOLDEN PROMISES</h2>
+          <p class="promises-sub">No matter what happens, yeh kabhi nahi badlega.</p>
+        </div>
+
+        <div class="promise-cards-grid">
+          <!-- Card 1 -->
+          <div class="promise-card" data-card="1">
+            <div class="promise-icon">🥺</div>
+            <div class="promise-rule">RULE #1</div>
+            <p class="promise-text">
+              Tu gussa hogi <span class="arrow">→</span> main manaunga.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="promise-card" data-card="2">
+            <div class="promise-icon">🤗</div>
+            <div class="promise-rule">RULE #2</div>
+            <p class="promise-text">
+              Tu naraz hogi <span class="arrow">→</span> main baat karunga.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="promise-card" data-card="3">
+            <div class="promise-icon">😂</div>
+            <div class="promise-rule">RULE #3</div>
+            <p class="promise-text">
+              Tu bolegi 'mujhse baat mat kar' <span class="arrow">→</span> main thoda kam pareshan karunga. <span class="emoji">😂</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="promise-closing-statement">
+          <p class="closing-line-1">But I'll still be there.</p>
+          <p class="closing-line-2">Because you're my best friend. ❤️</p>
+        </div>
+
+        <button class="primary-action-btn warm-btn" id="promiseNextBtn">
+          <span class="btn-text">HEAR THE FINAL VERDICT ⚖️</span>
+          <span class="btn-shine"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 11: FINAL VERDICT
+    =============================================== -->
+    <section class="screen-section" id="screen-final-verdict" data-step="11">
+      <div class="screen-content verdict-layout">
+        <div class="verdict-court-card">
+          <div class="court-gavel-icon">⚖️</div>
+          <div class="verdict-top-header">SUPREME TRIBUNAL OF FRIENDSHIP</div>
+          <h2 class="verdict-title">FINAL VERDICT</h2>
+
+          <div class="court-review-steps" id="courtReviewSteps">
+            <p class="court-step" data-delay="300">After reviewing all evidence...</p>
+            <p class="court-step" data-delay="1400">After examining all memories...</p>
+            <p class="court-step" data-delay="2500">After completing the investigation...</p>
+            <div class="court-pause-line" data-delay="3600">✦ ✦ ✦</div>
+            <h3 class="court-decision-announce" data-delay="4200">THE COURT HAS REACHED A DECISION.</h3>
+          </div>
+
+          <div class="guilty-reveal-container" id="guiltyContainer">
+            <div class="guilty-stamp">GRANTHI IS GUILTY OF:</div>
+
+            <ul class="charges-list">
+              <li class="charge-item" data-delay="4700">
+                <span class="charge-bullet">❤️</span>
+                <span class="charge-text">Being an amazing best friend</span>
+              </li>
+              <li class="charge-item" data-delay="5300">
+                <span class="charge-bullet">😂</span>
+                <span class="charge-text">Being extremely annoying</span>
+              </li>
+              <li class="charge-item" data-delay="5900">
+                <span class="charge-bullet">🥲</span>
+                <span class="charge-text">Making too many memories</span>
+              </li>
+              <li class="charge-item" data-delay="6500">
+                <span class="charge-bullet">🤡</span>
+                <span class="charge-text">Turning her best friend equally pagal</span>
+              </li>
+            </ul>
+
+            <div class="sentence-box" data-delay="7200">
+              <div class="sentence-label">SENTENCE:</div>
+              <div class="sentence-declaration">
+                You are sentenced to remain my best friend.
+              </div>
+              <div class="no-appeal-tag">NO APPEAL ALLOWED. 😂❤️</div>
+            </div>
+          </div>
+
+          <button class="primary-action-btn warm-btn" id="verdictProceedBtn">
+            <span class="btn-text">VIEW FINAL SURPRISE 🎁</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCREEN 12: FINAL SURPRISE & CASE CLOSED
+    =============================================== -->
+    <section class="screen-section" id="screen-final-surprise" data-step="12">
+      <div class="screen-content finale-layout">
+        <div class="celebration-hero-card">
+          <div class="finale-status-pill">
+            <span class="status-lock">Case Closed. 🔐</span>
+            <span class="status-dot">•</span>
+            <span class="status-perm">Friendship: Permanent. 🫰🏻</span>
+          </div>
+
+          <!-- Official Friendship Certificate / Seal Emblem -->
+          <div class="masterpiece-polaroid-frame certificate-seal-card">
+            <div class="frame-pin">✨</div>
+            <div class="certificate-inner-border">
+              <div class="certificate-top-tag">OFFICIAL FRIENDSHIP DECREE</div>
+              <div class="certificate-crest-icon">👑</div>
+              <h2 class="masterpiece-name">GRANTHI ❤️</h2>
+              <div class="masterpiece-title">Best Friend For Life.</div>
+              <div class="certificate-seal-badge">
+                <span class="seal-icon">🫰🏻</span>
+                <span class="seal-text">CASE SOLVED • PERMANENT BEST FRIEND</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emotional Friendship Quote -->
+          <div class="poetic-quote-card">
+            <div class="quote-flower">🌸</div>
+            <p class="quote-line-1">"Some people become memories.</p>
+            <p class="quote-line-2">Some people become a part of your memories.</p>
+            <p class="quote-line-3">You're the second one."</p>
+          </div>
+
+          <!-- Final Interaction Button -->
+          <div class="finale-action-block">
+            <button class="primary-action-btn celebration-btn pulse-glow" id="caseClosedBtn">
+              <span class="btn-text">CASE CLOSED ❤️</span>
+              <span class="btn-shine"></span>
+            </button>
+          </div>
+
+          <!-- Final Post-Closure Message (Appears on click) -->
+          <div class="post-closure-dialogue" id="postClosureBox">
+            <div class="closure-speech-bubble">
+              <p class="madam-line">Okay Madam...</p>
+              <p class="closure-line">Ab investigation khatam.</p>
+              <p class="behave-line">Normal behave kar sakti ho. 😂</p>
+              <div class="final-chapter-note">See you in the next chapter. ❤️</div>
+            </div>
+          </div>
+
+          <!-- Replay Option -->
+          <div class="replay-section">
+            <button class="replay-btn" id="replayBtn">
+              <span class="replay-icon">🔄</span>
+              <span class="replay-text">Run the investigation again</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
